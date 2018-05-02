@@ -1,68 +1,77 @@
-Connects to Medium from Ballerina.
+# Ballerina Medium Endpoint
 
-# Package Overview
-
-The Medium connector allows you to get Profile Information, List of Publications the user have 
-contributed, List of Contributors for a Publication REST API.
+The Medium connector allows you to get Profile Information, the list of Publications the user have 
+contributed, the list of Contributors for a Publication through the Medium REST API. It also allows you to create a 
+profile post and 
+publication post.
 It handles OAuth 2.0 authentication.
 
-**Profile Operations**
+The following sections provide you with information on how to use the Ballerina Medium endpoint.
+- [Compatibility](#compatibility)
+- [Getting started](#getting-started)
 
-The `wso2/medium` package contains operations that retrieve the profile information.
 
-**Publication Operations**
+### Compatibility
 
-The `wso2/medium` package contains operations to get List of Publications the user have contributed and the List of 
-Contributors for a Publication. 
+| Ballerina Language Version  | Medium API Version |
+| ----------------------------| -------------------------------|
+|  0.970.0                    |   V1                           |
 
-## Compatibility
+##### Prerequisites
+Download the ballerina [distribution](https://ballerinalang.org/downloads/).
 
-|                                 |       Version                  |
-|  :---------------------------:  |  :---------------------------: |
-|  Ballerina Language             |   0.970.0                      |
-|  Medium API         |   V4                           |
+##### Contribute To Develop
+Clone the repository by running the following command
+    `git clone https://github.com/sivaramya/package-medium.git`
 
-## Sample
+## Working with Medium Endpoint actions
+All the actions return valid response or MediumError. If the action is a success, then the requested resource will be 
+returned. Else MediumError object will be returned.
 
-First, import the `wso2/medium` package into the Ballerina project.
-
+In order for you to use the Medium Endpoint, first you need to create a Medium Client
+endpoint.
 ```ballerina
-import wso2/medium;
+endpoint Client mediumClient {
+            clientConfig:{
+                auth:{
+                    accessToken:accessToken,
+                    refreshToken:refreshToken,
+                    clientId:clientId,
+                    clientSecret:clientSecret
+                }
+            }
+        };
 ```
 
-Instantiate the connector by giving authentication details in the HTTP client config. The Medium 
-connector can be minimally instantiated in the HTTP client config using the access token or the client ID, client secret, and refresh token.
 
-**Obtaining Tokens to Run the Sample**
 
-1. Visit [Medium](https://medium.com/me/applications), and register an application and then you will get an clientId and a clientSecret with which you may access Medium’s API
-project.
-2. Visit [Medium Api Document](https://medium.com/me/applications), and get the access token and refresh token.
-
-You can now enter the credentials in the HTTP client config:
+#### Sample
 ```ballerina
-endpoint medium:Client mediumClient {
-    clientConfig:{
-        auth:{
-            accessToken:accessToken,
-            clientId:clientId,
-            clientSecret:clientSecret,
-            refreshToken:refreshToken
+    import wso2/medium;
+
+    public function main (string[] args) {
+        endpoint Client mediumClient {
+            clientConfig:{
+                auth:{
+                    accessToken:accessToken,
+                    refreshToken:refreshToken,
+                    clientId:clientId,
+                    clientSecret:clientSecret
+                }
+            }
+        };
+
+        json payload = { "title": "Hard things in software development", "contentFormat": "html",
+                "content": "<p>Cache invalidation</p><p>Naming things</p>", "tags": ["development", "design"],
+                "publishStatus": "draft"};
+        var publicationPostDetails = mediumClient->createPublicationPost(publicationId, payload);
+        match publicationPostDetails {
+             PublicationPost[] response => {
+                  test:assertNotEquals(response, null, msg = "Failed to call createPublicationPost()");
+             }
+             MediumError err => {
+                  test:assertFail(msg = err.message);
+             }
         }
     }
-};
 ```
-
-The `getProfileInfo` function retrieve the profile information.
-```ballerina
-var profileDetails = mediumClient->getProfileInfo();
-```
-
-The `getPublications` function retrieve the List of Publications the user have contributed.
-```ballerina
-var PublicationDetails = mediumClient->getPublications(userId);
-```
-The `getPublications` function retrieve the List of Contributors for a Publication.
-```ballerina
-var contributorsDetails = mediumClient->getContributors(publicationId);
-```# package-medium

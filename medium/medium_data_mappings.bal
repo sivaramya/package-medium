@@ -71,3 +71,72 @@ function convertToContributer(json jsonData) returns Contributers {
     data.role = jsonData.role != null ? jsonData.role.toString() : "";
     return data;
 }
+
+function convertToProfilePost(json jsonDatas) returns ProfilePost[] {
+    int i = 0;
+    ProfilePost[] data = [];
+    foreach jsonData in jsonDatas {
+        data[i] = convertToPost(jsonData);
+        i = i + 1;
+    }
+    return data;
+}
+
+function convertToPost(json jsonData) returns ProfilePost {
+    ProfilePost data = {};
+    data.id = jsonData.id != null ? jsonData.id.toString() : "";
+    data.title = jsonData.title != null ? jsonData.title.toString() : "";
+    data.authorId = jsonData.authorId != null ? jsonData.authorId.toString() : "";
+    data.url = jsonData.url != null ? jsonData.url.toString() : "";
+    data.canonicalUrl = jsonData.canonicalUrl != null ? jsonData.canonicalUrl.toString() : "";
+    data.publishStatus = jsonData.publishStatus != null ? jsonData.publishStatus.toString() : "";
+    data.publishedAt = jsonData.publishedAt != null ? convertToInt(jsonData.publishedAt) : 0;
+    data.license = jsonData.license != null ? jsonData.license.toString() : "";
+    data.licenseUrl = jsonData.licenseUrl != null ? jsonData.licenseUrl.toString() : "";
+    data.tags = jsonData.tags != null ? convertToArray(jsonData.tags) : [];
+    return data;
+}
+
+function convertToPublicationPost(json jsonDatas) returns PublicationPost[] {
+    int i = 0;
+    PublicationPost[] data = [];
+    foreach jsonData in jsonDatas {
+        data[i] = convertToPublication(jsonData);
+        i = i + 1;
+    }
+    return data;
+}
+
+function convertToPublication(json jsonData) returns PublicationPost {
+    PublicationPost data = {};
+    data.id = jsonData.id != null ? jsonData.id.toString() : "";
+    data.title = jsonData.title != null ? jsonData.title.toString() : "";
+    data.authorId = jsonData.authorId != null ? jsonData.authorId.toString() : "";
+    data.url = jsonData.url != null ? jsonData.url.toString() : "";
+    data.canonicalUrl = jsonData.canonicalUrl != null ? jsonData.canonicalUrl.toString() : "";
+    data.publishStatus = jsonData.publishStatus != null ? jsonData.publishStatus.toString() : "";
+    data.publicationId = jsonData.publicationId != null ? jsonData.publicationId.toString() : "";
+    data.license = jsonData.license != null ? jsonData.license.toString() : "";
+    data.licenseUrl = jsonData.licenseUrl != null ? jsonData.licenseUrl.toString() : "";
+    data.tags = jsonData.tags != null ? convertToArray(jsonData.tags) : [];
+    return data;
+}
+
+function convertToInt(json jsonVal) returns int {
+    string stringVal = jsonVal.toString();
+    if (stringVal != "") {
+        return check <int>stringVal;
+    } else {
+        return 0;
+    }
+}
+
+function convertToArray(json jsonValues) returns string[] {
+    string[] tags = [];
+    int i = 0;
+    foreach jsonVal in jsonValues {
+        tags[i] = jsonVal.toString();
+        i = i + 1;
+    }
+    return tags;
+}

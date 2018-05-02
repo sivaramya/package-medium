@@ -1,0 +1,7 @@
+[project]
+org-name = "Sivaramya"
+version = "0.6.2"
+authors = ["WSO2"]
+repository = "https://github.com/sivaramya/package-medium.git"
+keywords = ["Medium", "endpoint"]
+license = "Apache-2.0"

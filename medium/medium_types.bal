@@ -46,13 +46,63 @@ public type PublishedData {
 
 documentation {Struct to define the Contributers
     F{{publicationId}} An ID for the publication
-    F{{userId}} A user ID of the contributor.
+    F{{userId}} A user ID of the contributor
     F{{role}} Role of the user identified by userId
 }
 public type Contributers {
     string publicationId;
     string userId;
     string role;
+};
+
+documentation {Struct to define the ProfilePost
+    F{{id}} A unique identifier for the post
+    F{{title}} The post’s title
+    F{{authorId}} The userId of the post’s author
+    F{{url}} The URL of the post on Medium
+    F{{canonicalUrl}} The canonical URL of the post
+    F{{publishStatus}} The publish status of the post
+    F{{publishedAt}} The post’s published date
+    F{{license}} The license of the post
+    F{{licenseUrl}} The URL to the license of the post
+    F{{tags}} The post’s tags
+}
+public type ProfilePost {
+    string id;
+    string title;
+    string authorId;
+    string url;
+    string canonicalUrl;
+    string publishStatus;
+    int publishedAt;
+    string license;
+    string licenseUrl;
+    string[] tags;
+};
+
+documentation {Struct to define the PublicationPost
+    F{{id}} A unique identifier for the post
+    F{{title}} The post’s title
+    F{{authorId}} The userId of the post’s author
+    F{{url}} The URL of the post on Medium
+    F{{canonicalUrl}} The canonical URL of the post
+    F{{publishStatus}} The publish status of the post
+    F{{publicationId}} ID of the publication
+    F{{license}} The license of the post
+    F{{licenseUrl}} The URL to the license of the post
+    F{{tags}} The post’s tags
+}
+public type PublicationPost {
+    string id;
+    string title;
+    string authorId;
+    string url;
+    string canonicalUrl;
+    string publishStatus;
+    string publicationId;
+    string license;
+    string licenseUrl;
+    string[] tags;
 };
 
 documentation {Struct to define the error

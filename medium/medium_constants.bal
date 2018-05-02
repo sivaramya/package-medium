@@ -19,6 +19,12 @@
 //Medium API endpoint
 @final string BASE_URL = "https://api.medium.com";
 @final string REFRESH_URL = "https://api.medium.com/v1/tokens";
+@final string PROFILE_PATH = "/v1/me";
+@final string USERS_PATH = "/v1/users/";
+@final string PUBLICATION_PATH = "/v1/publications/";
+@final string POSTS = "/posts";
+@final string CONTRIBUTERS = "/contributors";
+@final string PUBLICATIONS = "/publications";
 
 //Secure client configs
 @final string SCHEME = "oauth";

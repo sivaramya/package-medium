@@ -22,6 +22,8 @@ string accessToken = config:getAsString("ACCESS_TOKEN");
 string clientId = config:getAsString("CLIENT_ID");
 string clientSecret = config:getAsString("CLIENT_SECRET");
 string refreshToken = config:getAsString("REFRESH_TOKEN");
+string userId = config:getAsString("USER_ID");
+string publicationId = config:getAsString("PUBLICATION_ID");
 
 endpoint Client mediumClient {
     clientConfig:{
@@ -41,46 +43,78 @@ function testGetProfileInfo() {
 
     match profileDetails {
         Data[] response => {
-            io:println(response);
-            test:assertNotEquals(response, null, msg = "Failed to call getService()");
+            test:assertNotEquals(response, null, msg = "Failed to call getProfileInfo()");
         }
         MediumError err => {
-            io:println(err.message);
             test:assertFail(msg = err.message);
         }
     }
 }
 
-//@test:Config
-//function testGetPublications() {
-//    io:println("-----------------Test case for getPublications method------------------");
-//    var profileDetails = mediumClient->getPublications("15fc867f3caf0265534d858ecda098");
-//
-//    match profileDetails {
-//        PublishedData[] response => {
-//            io:println(response);
-//            test:assertNotEquals(response, null, msg = "Failed to call getPublications()");
-//        }
-//        MediumError err => {
-//            io:println(err.message);
-//            test:assertFail(msg = err.message);
-//        }
-//    }
-//}
-//
-//@test:Config
-//function testGetContributors() {
-//    io:println("-----------------Test case for getContributors method------------------");
-//    var profileDetails = mediumClient->getContributors("b45573563f5a");
-//
-//    match profileDetails {
-//        Contributers[] response => {
-//            io:println(response);
-//            test:assertNotEquals(response, null, msg = "Failed to call getContributors()");
-//        }
-//        MediumError err => {
-//            io:println(err.message);
-//            test:assertFail(msg = err.message);
-//        }
-//    }
-//}
+@test:Config
+function testGetPublications() {
+    io:println("-----------------Test case for getPublications method------------------");
+    var publicationDetails = mediumClient->getPublications(userId);
+
+    match publicationDetails {
+        PublishedData[] response => {
+            test:assertNotEquals(response, null, msg = "Failed to call getPublications()");
+        }
+        MediumError err => {
+            test:assertFail(msg = err.message);
+        }
+    }
+}
+
+@test:Config
+function testGetContributors() {
+    io:println("-----------------Test case for getContributors method------------------");
+    var contributorsDetails = mediumClient->getContributors(publicationId);
+
+    match contributorsDetails {
+        Contributers[] response => {
+            test:assertNotEquals(response, null, msg = "Failed to call getContributors()");
+        }
+        MediumError err => {
+            test:assertFail(msg = err.message);
+        }
+    }
+}
+
+@test:Config
+function testCreateProfilePost() {
+    io:println("-----------------Test case for createProfilePost method------------------");
+    json payload = {"title": "Testing",
+        "contentFormat": "html",
+        "content": "<h1>Liverpool FC</h1><p>You’ll never walk alone.</p>",
+        "canonicalUrl": "http://jamietalbot.com/posts/liverpool-fc",
+        "tags": ["football", "sport", "Liverpool"],
+        "publishStatus": "public"};
+    var profilePostDetails = mediumClient->createProfilePost(userId, payload);
+    match profilePostDetails {
+        ProfilePost[] response => {
+            test:assertNotEquals(response, null, msg = "Failed to call createProfilePost()");
+        }
+        MediumError err => {
+            test:assertFail(msg = err.message);
+        }
+    }
+}
+
+@test:Config
+function testCreatePubicationPost() {
+    io:println("-----------------Test case for createPublicationPost method------------------");
+    json payload = { "title": "Hard things in software development", "contentFormat": "html",
+        "content": "<p>Cache invalidation</p><p>Naming things</p>", "tags": ["development", "design"],
+        "publishStatus": "draft"};
+    var publicationPostDetails = mediumClient->createPublicationPost(publicationId, payload);
+    match publicationPostDetails {
+        PublicationPost[] response => {
+            test:assertNotEquals(response, null, msg = "Failed to call createPublicationPost()");
+        }
+        MediumError err => {
+            test:assertFail(msg = err.message);
+        }
+    }
+}
+
